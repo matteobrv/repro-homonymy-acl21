@@ -62,7 +62,7 @@ arg_parser.add_argument(
     '--lang',
     '-l',
     type=str,
-    choices=['en', 'gl', 'pt', 'es'],
+    choices=['en', 'gl', 'pt', 'es', 'it'],
     help="Language of the dataset (and of the model).",
     required=True,
     default=False
@@ -132,7 +132,10 @@ if __name__ == '__main__':
         exit(1)
         conllu_file = os.path.join('datasets', sentences_to_conllu(inputfile, lang))
     else:
+        # remove parent directories e.g. datasets/dataset_triples_en.tsv -> dataset_triples_en.tsv
         conllu_file = re.sub('^.+/', '', inputfile)
+        # remove pattern between underscores e.g. dataset_triples_en.tsv -> dataset_en.tsv
+        conllu_file = re.sub(r'(?<=_).*_', '', conllu_file)
         conllu_file = os.path.join('datasets', re.sub('\.[^.]+$', '', conllu_file) + '_sentences.conllu')
         
     if os.path.isfile(conllu_file):
@@ -141,25 +144,25 @@ if __name__ == '__main__':
         exit('\nPlease parse the sentences first (--parse y)')
 
     # Read selectional preferences
-    if args.prefs == None:
-        f = 'preferences_mi_' + lang + '.txt'
-        prefs_file = os.path.join('datasets', f)
-    else:
-        prefs_file = args.prefs
-    if os.path.isfile(prefs_file):
-        preferences = {'h':dict(), 'd':dict()} # key: H|D (direction of deprel), value=dict: key: tuple (head, deprel*), value: list of tuples (lema, NOUN)
-        with open(prefs_file, 'r') as pf:
-            for line in pf:
-                line = line.rstrip()
-                info = line.split(';')
-                key = (info[1].split(',')[0], info[1].split(',')[1])
-                vals = []
-                preferences[info[0]][key] = []
-                for i in range(2,len(info)):
-                    tup = (info[i].split(',')[0], info[i].split(',')[1])
-                    preferences[info[0]][key].append(tup)
-    else:
-        exit("File '%s' (selectional preferences) not found." %prefs_file)
+    # if args.prefs == None:
+    #     f = 'preferences_mi_' + lang + '.txt'
+    #     prefs_file = os.path.join('datasets', f)
+    # else:
+    #     prefs_file = args.prefs
+    # if os.path.isfile(prefs_file):
+    #     preferences = {'h':dict(), 'd':dict()} # key: H|D (direction of deprel), value=dict: key: tuple (head, deprel*), value: list of tuples (lema, NOUN)
+    #     with open(prefs_file, 'r') as pf:
+    #         for line in pf:
+    #             line = line.rstrip()
+    #             info = line.split(';')
+    #             key = (info[1].split(',')[0], info[1].split(',')[1])
+    #             vals = []
+    #             preferences[info[0]][key] = []
+    #             for i in range(2,len(info)):
+    #                 tup = (info[i].split(',')[0], info[i].split(',')[1])
+    #                 preferences[info[0]][key].append(tup)
+    # else:
+    #     exit("File '%s' (selectional preferences) not found." %prefs_file)
 
     # Model and vocab
     model, vocab = load_model(system, model_file)
@@ -202,9 +205,9 @@ if __name__ == '__main__':
                         method1b[s] = get_head_dep_vector(target, position, sent_clean, sent_conllu, model, vocab, 'sum', 2)
                         method1c[s] = get_head_dep_vector(target, position, sent_clean, sent_conllu, model, vocab, 'sum', 3)
                         method1d[s] = get_head_dep_vector(target, position, sent_clean, sent_conllu, model, vocab, 'sum', 4)
-                        method2a[s] = get_select_prefs_vector(target, preferences, sent_conllu, model, vocab, 'sum', 10, 1)
-                        method2b[s] = get_select_prefs_vector(target, preferences, sent_conllu, model, vocab, 'sum', 10, 2)
-                        method2c[s] = get_select_prefs_vector(target, preferences, sent_conllu, model, vocab, 'sum', 10, 3)
+                        # method2a[s] = get_select_prefs_vector(target, preferences, sent_conllu, model, vocab, 'sum', 10, 1)
+                        # method2b[s] = get_select_prefs_vector(target, preferences, sent_conllu, model, vocab, 'sum', 10, 2)
+                        # method2c[s] = get_select_prefs_vector(target, preferences, sent_conllu, model, vocab, 'sum', 10, 3)
                     else:
                         print("ERROR", sent_clean, sent)
                         exit(1)
@@ -219,9 +222,9 @@ if __name__ == '__main__':
                     cos1_met1b, cos2_met1b, result_met1b = get_results(4, 5, 6, method1b)
                     cos1_met1c, cos2_met1c, result_met1c = get_results(4, 5, 6, method1c)
                     cos1_met1d, cos2_met1d, result_met1d = get_results(4, 5, 6, method1d)
-                    cos1_met2a, cos2_met2a, result_met2a = get_results(4, 5, 6, method2a)
-                    cos1_met2b, cos2_met2b, result_met2b = get_results(4, 5, 6, method2b)
-                    cos1_met2c, cos2_met2c, result_met2c = get_results(4, 5, 6, method2c)
+                    # cos1_met2a, cos2_met2a, result_met2a = get_results(4, 5, 6, method2a)
+                    # cos1_met2b, cos2_met2b, result_met2b = get_results(4, 5, 6, method2b)
+                    # cos1_met2c, cos2_met2c, result_met2c = get_results(4, 5, 6, method2c)
                 elif comp == 3:
                     cos1_bas1, cos2_bas1, cos3_bas1, result_bas1 = get_results_all(4, 5, 6, baseline1)
                     cos1_bas2, cos2_bas2, cos3_bas2, result_bas2 = get_results_all(4, 5, 6, baseline2)
@@ -231,16 +234,16 @@ if __name__ == '__main__':
                     cos1_met1b, cos2_met1b, cos3_met1b, result_met1b = get_results_all(4, 5, 6, method1b)
                     cos1_met1c, cos2_met1c, cos3_met1c, result_met1c = get_results_all(4, 5, 6, method1c)
                     cos1_met1d, cos2_met1d, cos3_met1d, result_met1d = get_results_all(4, 5, 6, method1d)
-                    cos1_met2a, cos2_met2a, cos3_met2a, result_met2a = get_results_all(4, 5, 6, method2a)
-                    cos1_met2b, cos2_met2b, cos3_met2b, result_met2b = get_results_all(4, 5, 6, method2b)
-                    cos1_met2c, cos2_met2c, cos3_met2c, result_met2c = get_results_all(4, 5, 6, method2c)
+                    # cos1_met2a, cos2_met2a, cos3_met2a, result_met2a = get_results_all(4, 5, 6, method2a)
+                    # cos1_met2b, cos2_met2b, cos3_met2b, result_met2b = get_results_all(4, 5, 6, method2b)
+                    # cos1_met2c, cos2_met2c, cos3_met2c, result_met2c = get_results_all(4, 5, 6, method2c)
 
 
                 # Print results
                 print(tgt, inputinfo[1], inputinfo[2], inputinfo[3], sents[4], sents[5], sents[6],
                       result_bas1, result_bas2, result_bas3, result_bas4,
                       result_met1a, result_met1b, result_met1c, result_met1d,
-                      result_met2a, result_met2b, result_met2c,
+                      #result_met2a, result_met2b, result_met2c,
                       sep='\t')
 
             else:
@@ -248,5 +251,5 @@ if __name__ == '__main__':
                 print("Target", "POS", "Context", "Overlap", "Sent1", "Sent2", "Sent3",
                       "Bas1", "Bas2", "Bas3", "Bas4",
                       "Meth1a", "Meth1b", "Meth1c", "Meth1d",
-                      "Meth2a", "Meth2b", "Meth2c",
+                      # "Meth2a", "Meth2b", "Meth2c",
                       sep='\t')

@@ -46,7 +46,7 @@ arg_parser.add_argument(
     '--lang',
     '-l',
     type=str,
-    choices=['en', 'gl', 'pt', 'es'],
+    choices=['en', 'gl', 'pt', 'es', 'it'],
     help="Language of the dataset (and of the model).",
     required=True,
     default=False
@@ -95,19 +95,24 @@ elif sistema == 'bert':
     elif lang == 'gl':
         model_select = {
             1:'bert-base-multilingual-cased',
-            2:'', # Path to Galician BERT (6 layers)
-            3:'' # Path to Galician BERT (12 layers)
+            2:'marcosgg/bert-small-gl-cased', # Path to Galician BERT (6 layers)
+            3:'marcosgg/bert-base-gl-cased' # Path to Galician BERT (12 layers)
         }
     elif lang == 'pt':
         model_select = {
             1:'bert-base-multilingual-cased',
-            2: 'neuralmind/bert-base-portuguese-cased', # bertimbau base
-            3: 'neuralmind/bert-large-portuguese-cased' # bertimbau large
+            2:'neuralmind/bert-base-portuguese-cased', # bertimbau base
+            3:'neuralmind/bert-large-portuguese-cased' # bertimbau large
         }
     elif lang == 'es':
         model_select = {
             1:'bert-base-multilingual-cased',
             2:'dccuchile/bert-base-spanish-wwm-cased', # beto base
+        }
+    elif lang == 'it':
+        model_select = {
+            1:'bert-base-multilingual-cased',
+            2:'dbmdz/bert-base-italian-cased',
         }
         
 elif sistema == 'dbert':

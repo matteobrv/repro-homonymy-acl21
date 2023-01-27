@@ -13,25 +13,25 @@ from sklearn.metrics.pairwise import cosine_similarity
 # Load the embeddings
 #####################
 def load_model(system, model_file):
-
+    # NOTE: the index2word attribute has been replaced by index_to_key since Gensim 4.0.0.
     # Word2Vec
     if system == 'w2v':
         if model_file.endswith('txt'):
             model = KeyedVectors.load_word2vec_format(model_file, binary=False)
-            vocab = set(model.index2word)
+            vocab = set(model.index_to_key)
         elif model_file.endswith('w2v'):
             model = word2vec.Word2Vec.load(model_file)
-            vocab = set(model.wv.index2word)
+            vocab = set(model.wv.index_to_key)
     # Other models [only .txt KeyedVectors]
     elif system == 'glove':
         model = KeyedVectors.load_word2vec_format(model_file, binary=False)
-        vocab = set(model.index2word)
+        vocab = set(model.index_to_key)
     elif system == 'fasttext':
         model = KeyedVectors.load_word2vec_format(model_file, binary=False)
-        vocab = set(model.index2word)
+        vocab = set(model.index_to_key)
     elif system == 'dep2vec':
         model = KeyedVectors.load_word2vec_format(model_file, binary=False)
-        vocab = set(model.index2word)
+        vocab = set(model.index_to_key)
 
     return(model, vocab)
 
@@ -75,13 +75,14 @@ def get_target(sentence):
 #################################
 # If not in vocab: None | [1 * len(dimensions)]
 def get_vector(word, model, vocab):
+    # replace model.wv[word] with model[word]
     if word in vocab:
-        vector = model.wv[word]
+        vector = model[word]
     elif word.lower() in vocab:
-        vector = model.wv[word.lower()]
+        vector = model[word.lower()]
     else:
         dimensions = model.vector_size
-        vector = model.wv['a']
+        vector = model['a']
         for d in vector:
             d = 0
     return(vector)
