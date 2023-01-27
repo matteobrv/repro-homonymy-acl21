@@ -1,0 +1,33 @@
+Bas1
+Experiments      Accuracy
+-------------  ----------
+exp_1           0.307692
+exp_2           0.482759
+exp_3           0.0769231
+exp_4           0.514706
+                        Full micro avg.    Exp. micro avg.    Exp. macro avg.
+--------------------  -----------------  -----------------  -----------------
+avg. accuracy scores           0.490832           0.319703            0.34552
+
+Bas2
+Experiments      Accuracy
+-------------  ----------
+exp_1            0.653846
+exp_2            0.603448
+exp_3            0.615385
+exp_4            0.132353
+                        Full micro avg.    Exp. micro avg.    Exp. macro avg.
+--------------------  -----------------  -----------------  -----------------
+avg. accuracy scores           0.603667           0.498141           0.501258
+
+Meth1c
+Experiments      Accuracy
+-------------  ----------
+exp_1            0.576923
+exp_2            0.655172
+exp_3            0.142857
+exp_4            0.147059
+                        Full micro avg.    Exp. micro avg.    Exp. macro avg.
+--------------------  -----------------  -----------------  -----------------
+avg. accuracy scores           0.524683            0.33829           0.380503
+

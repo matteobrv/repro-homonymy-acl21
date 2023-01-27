@@ -1,0 +1,33 @@
+ResultsSentAvg[-4]
+Experiments      Accuracy
+-------------  ----------
+exp_1            0.762712
+exp_2            0.8
+exp_3            0.740741
+exp_4            0.14
+                        Full micro avg.    Exp. micro avg.    Exp. macro avg.
+--------------------  -----------------  -----------------  -----------------
+avg. accuracy scores           0.641975           0.641975           0.610863
+
+ResultsConcat[-4]
+Experiments      Accuracy
+-------------  ----------
+exp_1            0.830508
+exp_2            0.875
+exp_3            0.444444
+exp_4            0.24
+                        Full micro avg.    Exp. micro avg.    Exp. macro avg.
+--------------------  -----------------  -----------------  -----------------
+avg. accuracy scores            0.63786            0.63786           0.597488
+
+ResultsSum[-4]
+Experiments      Accuracy
+-------------  ----------
+exp_1            0.830508
+exp_2            0.8875
+exp_3            0.462963
+exp_4            0.3
+                        Full micro avg.    Exp. micro avg.    Exp. macro avg.
+--------------------  -----------------  -----------------  -----------------
+avg. accuracy scores           0.658436           0.658436           0.620243
+
